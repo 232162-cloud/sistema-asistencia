@@ -83,8 +83,3 @@ public class Asistencia {
         this.observaciones = observaciones;
     }
 }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-}
