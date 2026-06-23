@@ -1,6 +1,5 @@
 package com.unamba.asistencia.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,11 @@ import com.unamba.asistencia.service.EstudianteService;
 @Controller
 public class EstudianteController {
 
-    @Autowired
-    private EstudianteService service;
+    private final EstudianteService service;
+
+    public EstudianteController(EstudianteService service) {
+        this.service = service;
+    }
 
     @GetMapping("/")
     public String inicio(Model model) {
