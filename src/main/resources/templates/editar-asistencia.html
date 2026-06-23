@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editar Asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LtrjvnR4/J57B4U4v+ABn4wMNq9bLw1J3p6ZFDvR9kcBI2YK4prKpF0u7X3M9wQF" crossorigin="anonymous" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">UNAMBA - Asistencia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Estudiantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cursos">Cursos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/asistencias">Asistencias</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Editar Asistencia</h2>
+                    <form th:object="${asistencia}" th:action="@{/asistencias/actualizar/{id}(id=${asistencia.id})}" method="post">
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label">Fecha</label>
+                            <input type="date" id="fecha" name="fecha" class="form-control" th:field="*{fecha}" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select id="estado" name="estado" class="form-select" th:field="*{estado}" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Presente">Presente</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Falta">Falta</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea id="observaciones" name="observaciones" class="form-control" rows="4" th:field="*{observaciones}"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="/asistencias" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7GX2B0Qx6xZWJ+v5A9d6u0T5+uhZqk9S0G3" crossorigin="anonymous"></script>
+</body>
+</html>
