@@ -21,7 +21,7 @@ public class Asistencia {
 
     private LocalDate fecha;
 
-    private String estado; // "PRESENTE", "AUSENTE", "JUSTIFICADO"
+    private String estado; // "Presente", "Tarde", "Falta"
 
     private String observaciones;
 
@@ -78,6 +78,11 @@ public class Asistencia {
     public String getObservaciones() {
         return observaciones;
     }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+}
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;

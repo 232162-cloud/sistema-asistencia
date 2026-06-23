@@ -20,15 +20,18 @@ public class Curso {
 
     private String profesor;
 
+    private String ciclo;
+
     public Curso() {
     }
 
-    public Curso(String codigo, String nombre, String descripcion, Integer creditos, String profesor) {
+    public Curso(String codigo, String nombre, String descripcion, Integer creditos, String profesor, String ciclo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.creditos = creditos;
         this.profesor = profesor;
+        this.ciclo = ciclo;
     }
 
     public Long getId() {
@@ -77,5 +80,13 @@ public class Curso {
 
     public void setProfesor(String profesor) {
         this.profesor = profesor;
+    }
+
+    public String getCiclo() {
+        return ciclo;
+    }
+
+    public void setCiclo(String ciclo) {
+        this.ciclo = ciclo;
     }
 }
