@@ -3,19 +3,23 @@ package com.unamba.asistencia.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.unamba.asistencia.model.Curso;
 import com.unamba.asistencia.service.CursoService;
 
-@Controller
-@RequestMapping("/cursos")
+@RestController
+@RequestMapping("/api/cursos")
 public class CursoController {
 
     private final CursoService service;
@@ -24,64 +28,62 @@ public class CursoController {
         this.service = service;
     }
 
-    @GetMapping("")
-    public String listar(Model model) {
-        model.addAttribute("cursos", service.listar());
-        return "cursos";
+    @GetMapping
+    public ResponseEntity<List<Curso>> listar() {
+        return ResponseEntity.ok(service.listar());
     }
 
-    @PostMapping("/guardar")
-    public String guardar(Curso curso) {
-        service.guardar(curso);
-        return "redirect:/cursos";
+    @GetMapping("/{id}")
+    public ResponseEntity<Curso> obtenerPorId(@PathVariable Long id) {
+        Optional<Curso> curso = service.obtenerPorId(id);
+        return curso.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping("/buscar")
-    public String buscar(
+    public ResponseEntity<List<Curso>> buscar(
             @RequestParam(required = false) String codigo,
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String profesor,
-            @RequestParam(required = false) String ciclo,
-            Model model) {
-        
-        List<Curso> resultados = null;
-        
+            @RequestParam(required = false) String ciclo) {
+
         if (codigo != null && !codigo.isEmpty()) {
-            resultados = service.buscarPorCodigo(codigo);
-        } else if (nombre != null && !nombre.isEmpty()) {
-            resultados = service.buscarPorNombre(nombre);
-        } else if (profesor != null && !profesor.isEmpty()) {
-            resultados = service.buscarPorProfesor(profesor);
-        } else if (ciclo != null && !ciclo.isEmpty()) {
-            resultados = service.buscarPorCiclo(ciclo);
-        } else {
-            resultados = service.listar();
+            return ResponseEntity.ok(service.buscarPorCodigo(codigo));
         }
-        
-        model.addAttribute("cursos", resultados);
-        return "cursos";
+        if (nombre != null && !nombre.isEmpty()) {
+            return ResponseEntity.ok(service.buscarPorNombre(nombre));
+        }
+        if (profesor != null && !profesor.isEmpty()) {
+            return ResponseEntity.ok(service.buscarPorProfesor(profesor));
+        }
+        if (ciclo != null && !ciclo.isEmpty()) {
+            return ResponseEntity.ok(service.buscarPorCiclo(ciclo));
+        }
+        return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
+    @PostMapping
+    public ResponseEntity<Curso> guardar(@RequestBody Curso curso) {
+        Curso creado = service.guardar(curso);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Curso> actualizar(@PathVariable Long id, @RequestBody Curso curso) {
+        Curso actualizado = service.actualizar(id, curso);
+        if (actualizado == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         Optional<Curso> curso = service.obtenerPorId(id);
-        if (curso.isPresent()) {
-            model.addAttribute("curso", curso.get());
-            return "editar-curso";
+        if (curso.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return "redirect:/cursos";
-    }
-
-    @PostMapping("/actualizar/{id}")
-    public String actualizar(@PathVariable Long id, Curso curso) {
-        service.actualizar(id, curso);
-        return "redirect:/cursos";
-    }
-
-    @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
         service.eliminar(id);
-        return "redirect:/cursos";
+        return ResponseEntity.noContent().build();
     }
-
 }
