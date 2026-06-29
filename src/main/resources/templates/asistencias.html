@@ -1,142 +1,574 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Gestión de Asistencias - UNAMBA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LtrjvnR4/J57B4U4v+ABn4wMNq9bLw1J3p6ZFDvR9kcBI2YK4prKpF0u7X3M9wQF" crossorigin="anonymous" />
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Sistema de Gestión de Asistencias | UNAMBA</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+
+body{
+    background:#f4f7fb;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+/* NAVBAR */
+
+.navbar{
+    background:linear-gradient(90deg,#0d47a1,#1565c0);
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.navbar-brand{
+    font-size:24px;
+    font-weight:700;
+}
+
+.nav-link{
+    font-weight:600;
+}
+
+.nav-link:hover{
+    color:#ffc107 !important;
+}
+
+/* TARJETAS */
+
+.card{
+    border:none;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.card-body{
+    padding:30px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.section-title i{
+    font-size:25px;
+    color:#1565c0;
+}
+
+.card-title{
+    font-size:25px;
+    font-weight:700;
+    color:#0d47a1;
+}
+
+/* FORMULARIOS */
+
+.form-label{
+    font-weight:600;
+}
+
+.form-control,
+.form-select{
+    border-radius:12px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#1565c0;
+    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+}
+
+/* BOTONES */
+
+.btn{
+    border-radius:12px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#1565c0;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#0d47a1;
+}
+
+/* TABLA */
+
+.table{
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.table-hover tbody tr:hover{
+    background:#eef5ff;
+}
+
+.table thead{
+    background:#0d47a1;
+}
+
+/* BADGES */
+
+.badge{
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:14px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.card-body{
+padding:20px;
+}
+
+.card-title{
+font-size:22px;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">UNAMBA - Asistencia</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Estudiantes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/cursos">Cursos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/asistencias">Asistencias</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+
+<div class="container-fluid">
+
+<a class="navbar-brand" href="/">
+
+<i class="fa-solid fa-graduation-cap me-2"></i>
+
+UNAMBA | Sistema de Asistencias
+
+</a>
+
+<button class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#navbarNav">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+
+<a class="nav-link" href="/">
+
+<i class="fa-solid fa-users me-1"></i>
+
+Estudiantes
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link" href="/cursos">
+
+<i class="fa-solid fa-book me-1"></i>
+
+Cursos
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link active" href="/asistencias">
+
+<i class="fa-solid fa-calendar-check me-1"></i>
+
+Asistencias
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
 </nav>
 
 <div class="container">
-    <div class="row gy-4">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-3">Buscar asistencias</h2>
-                    <form class="row g-3" th:action="@{/asistencias/buscar}" method="get">
-                        <div class="col-md-4">
-                            <label for="fecha" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="estado" class="form-label">Estado</label>
-                            <select id="estado" name="estado" class="form-select">
-                                <option value="">Todos</option>
-                                <option value="Presente">Presente</option>
-                                <option value="Tarde">Tarde</option>
-                                <option value="Falta">Falta</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end justify-content-end">
-                            <button type="submit" class="btn btn-outline-primary me-2">Buscar</button>
-                            <a href="/asistencias" class="btn btn-secondary">Limpiar</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-12 col-xl-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-3">Registrar asistencia</h2>
-                    <form th:action="@{/asistencias/guardar}" method="post">
-                        <div class="mb-3">
-                            <label for="estudianteId" class="form-label">ID Estudiante</label>
-                            <input type="text" class="form-control" id="estudianteId" name="estudiante.id" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="cursoId" class="form-label">ID Curso</label>
-                            <input type="text" class="form-control" id="cursoId" name="curso.id" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="fechaForm" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="fechaForm" name="fecha" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="estadoForm" class="form-label">Estado</label>
-                            <select id="estadoForm" name="estado" class="form-select" required>
-                                <option value="">Seleccione...</option>
-                                <option value="Presente">Presente</option>
-                                <option value="Tarde">Tarde</option>
-                                <option value="Falta">Falta</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label">Observaciones</label>
-                            <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Guardar asistencia</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="row gy-4">
 
-        <div class="col-12 col-xl-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-3">Lista de asistencias</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Estudiante</th>
-                                    <th>Curso</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th>Observaciones</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="asistencia : ${asistencias}">
-                                    <td th:text="${asistencia.id}"></td>
-                                    <td th:text="${asistencia.estudiante.nombres}"></td>
-                                    <td th:text="${asistencia.curso.nombre}"></td>
-                                    <td th:text="${asistencia.fecha}"></td>
-                                    <td th:text="${asistencia.estado}"></td>
-                                    <td th:text="${asistencia.observaciones}"></td>
-                                    <td>
-                                        <a th:href="@{/asistencias/editar/{id}(id=${asistencia.id})}" class="btn btn-sm btn-outline-primary me-2">Editar</a>
-                                        <a th:href="@{/asistencias/eliminar/{id}(id=${asistencia.id})}" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${#lists.isEmpty(asistencias)}">
-                                    <td colspan="7" class="text-center">No hay registros de asistencia.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- BUSCADOR -->
+
+<div class="col-12">
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="section-title">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<h2 class="card-title mb-0">
+
+Buscar asistencias
+
+</h2>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7GX2B0Qx6xZWJ+v5A9d6u0T5+uhZqk9S0G3" crossorigin="anonymous"></script>
+<form class="row g-3"
+th:action="@{/asistencias/buscar}"
+method="get">
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Fecha
+
+</label>
+
+<input type="date"
+class="form-control"
+name="fecha">
+
+</div>
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Estado
+
+</label>
+
+<select name="estado"
+class="form-select">
+
+<option value="">Todos</option>
+
+<option value="Presente">Presente</option>
+
+<option value="Tarde">Tarde</option>
+
+<option value="Falta">Falta</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 d-flex align-items-end justify-content-end">
+
+<button type="submit"
+class="btn btn-outline-primary me-2">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+Buscar
+
+</button>
+
+<a href="/asistencias"
+class="btn btn-secondary">
+
+Limpiar
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- FORMULARIO -->
+
+<div class="col-lg-4">
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="section-title">
+
+<i class="fa-solid fa-user-check"></i>
+
+<h2 class="card-title mb-0">
+
+Registrar asistencia
+
+</h2>
+
+</div>
+
+<form th:action="@{/asistencias/guardar}"
+method="post">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+ID Estudiante
+
+</label>
+
+<input type="text"
+class="form-control"
+name="estudiante.id"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+ID Curso
+
+</label>
+
+<input type="text"
+class="form-control"
+name="curso.id"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Fecha
+
+</label>
+
+<input type="date"
+class="form-control"
+name="fecha"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Estado
+
+</label>
+
+<select class="form-select"
+name="estado"
+required>
+
+<option value="">Seleccione</option>
+
+<option value="Presente">Presente</option>
+
+<option value="Tarde">Tarde</option>
+
+<option value="Falta">Falta</option>
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Observaciones
+
+</label>
+
+<textarea class="form-control"
+name="observaciones"
+rows="3"></textarea>
+
+</div>
+
+<button class="btn btn-primary w-100">
+
+<i class="fa-solid fa-floppy-disk me-2"></i>
+
+Guardar asistencia
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TABLA -->
+
+<div class="col-lg-8">
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="section-title">
+
+<i class="fa-solid fa-table-list"></i>
+
+<h2 class="card-title mb-0">
+
+Lista de asistencias
+
+</h2>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+
+<th>Estudiante</th>
+
+<th>Curso</th>
+
+<th>Fecha</th>
+
+<th>Estado</th>
+
+<th>Observaciones</th>
+
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr th:each="asistencia : ${asistencias}">
+
+<td th:text="${asistencia.id}"></td>
+
+<td th:text="${asistencia.estudiante.nombres}"></td>
+
+<td th:text="${asistencia.curso.nombre}"></td>
+
+<td th:text="${asistencia.fecha}"></td>
+
+<td>
+
+<span th:switch="${asistencia.estado}">
+
+<span th:case="'Presente'"
+class="badge bg-success"
+th:text="${asistencia.estado}"></span>
+
+<span th:case="'Tarde'"
+class="badge bg-warning text-dark"
+th:text="${asistencia.estado}"></span>
+
+<span th:case="'Falta'"
+class="badge bg-danger"
+th:text="${asistencia.estado}"></span>
+
+<span th:case="*"
+class="badge bg-secondary"
+th:text="${asistencia.estado}"></span>
+
+</span>
+
+</td>
+
+<td th:text="${asistencia.observaciones}"></td>
+
+<td>
+
+<a th:href="@{/asistencias/editar/{id}(id=${asistencia.id})}"
+class="btn btn-sm btn-outline-primary me-2">
+
+<i class="fa-solid fa-pen-to-square"></i>
+
+Editar
+
+</a>
+
+<a th:href="@{/asistencias/eliminar/{id}(id=${asistencia.id})}"
+class="btn btn-sm btn-outline-danger">
+
+<i class="fa-solid fa-trash"></i>
+
+Eliminar
+
+</a>
+
+</td>
+
+</tr>
+
+<tr th:if="${#lists.isEmpty(asistencias)}">
+
+<td colspan="7"
+class="text-center">
+
+No hay registros de asistencia
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>
