@@ -1,49 +1,26 @@
-package com.unamba.asistencia.model;
+package com.unamba.asistencia.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "cursos")
-public class Curso {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CursoRequest {
 
     private String codigo;
-
     private String nombre;
-
     private String descripcion;
-
     private Integer creditos;
-
     private String profesor;
-
     private String ciclo;
+    private Long docenteId;
 
-    @ManyToOne
-    @JoinColumn(name = "docente_id", nullable = true)
-    private Usuario docente;
-
-    public Curso() {
+    public CursoRequest() {
     }
 
-    public Curso(String codigo, String nombre, String descripcion, Integer creditos, String profesor, String ciclo) {
+    public CursoRequest(String codigo, String nombre, String descripcion, Integer creditos, String profesor, String ciclo, Long docenteId) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.creditos = creditos;
         this.profesor = profesor;
         this.ciclo = ciclo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.docenteId = docenteId;
     }
 
     public String getCodigo() {
@@ -94,11 +71,11 @@ public class Curso {
         this.ciclo = ciclo;
     }
 
-    public Usuario getDocente() {
-        return docente;
+    public Long getDocenteId() {
+        return docenteId;
     }
 
-    public void setDocente(Usuario docente) {
-        this.docente = docente;
+    public void setDocenteId(Long docenteId) {
+        this.docenteId = docenteId;
     }
 }

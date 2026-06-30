@@ -6,15 +6,19 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.unamba.asistencia.model.Curso;
+import com.unamba.asistencia.model.Usuario;
 import com.unamba.asistencia.repository.CursoRepository;
+import com.unamba.asistencia.repository.UsuarioRepository;
 
 @Service
 public class CursoService {
 
     private final CursoRepository repository;
+    private final UsuarioRepository usuarioRepository;
 
-    public CursoService(CursoRepository repository) {
+    public CursoService(CursoRepository repository, UsuarioRepository usuarioRepository) {
         this.repository = repository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<Curso> listar() {
@@ -22,6 +26,11 @@ public class CursoService {
     }
 
     public Curso guardar(Curso curso) {
+        return repository.save(curso);
+    }
+
+    public Curso guardar(Curso curso, Long docenteId) {
+        asignarDocente(curso, docenteId);
         return repository.save(curso);
     }
 
@@ -67,9 +76,57 @@ public class CursoService {
             if (cursoActualizado.getCiclo() != null) {
                 c.setCiclo(cursoActualizado.getCiclo());
             }
+            if (cursoActualizado.getDocente() != null) {
+                c.setDocente(cursoActualizado.getDocente());
+            }
             return repository.save(c);
         }
         return null;
+    }
+
+    public Curso actualizar(Long id, Curso cursoActualizado, Long docenteId) {
+        Optional<Curso> curso = repository.findById(id);
+        if (curso.isPresent()) {
+            Curso c = curso.get();
+            if (cursoActualizado.getCodigo() != null) {
+                c.setCodigo(cursoActualizado.getCodigo());
+            }
+            if (cursoActualizado.getNombre() != null) {
+                c.setNombre(cursoActualizado.getNombre());
+            }
+            if (cursoActualizado.getDescripcion() != null) {
+                c.setDescripcion(cursoActualizado.getDescripcion());
+            }
+            if (cursoActualizado.getCreditos() != null) {
+                c.setCreditos(cursoActualizado.getCreditos());
+            }
+            if (cursoActualizado.getProfesor() != null) {
+                c.setProfesor(cursoActualizado.getProfesor());
+            }
+            if (cursoActualizado.getCiclo() != null) {
+                c.setCiclo(cursoActualizado.getCiclo());
+            }
+            if (docenteId != null) {
+                asignarDocente(c, docenteId);
+            }
+            return repository.save(c);
+        }
+        return null;
+    }
+
+    private void asignarDocente(Curso curso, Long docenteId) {
+        if (docenteId == null) {
+            return;
+        }
+        Optional<Usuario> usuario = usuarioRepository.findById(docenteId);
+        if (usuario.isEmpty()) {
+            throw new IllegalArgumentException("Docente no encontrado");
+        }
+        Usuario docente = usuario.get();
+        if (!"DOCENTE".equals(docente.getRol())) {
+            throw new IllegalArgumentException("Usuario no tiene rol DOCENTE");
+        }
+        curso.setDocente(docente);
     }
 
     public void eliminar(Long id) {

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +30,13 @@ public class EstudianteController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','DOCENTE')")
     public ResponseEntity<List<Estudiante>> listar() {
         return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCENTE')")
     public ResponseEntity<Estudiante> obtenerPorId(@PathVariable Long id) {
         Optional<Estudiante> estudiante = service.obtenerPorId(id);
         return estudiante.map(ResponseEntity::ok)
@@ -41,6 +44,7 @@ public class EstudianteController {
     }
 
     @GetMapping("/buscar")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCENTE')")
     public ResponseEntity<List<Estudiante>> buscar(
             @RequestParam(required = false) String codigo,
             @RequestParam(required = false) String nombres,
@@ -63,12 +67,14 @@ public class EstudianteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Estudiante> guardar(@RequestBody Estudiante estudiante) {
         Estudiante guardado = service.guardar(estudiante);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Estudiante> actualizar(@PathVariable Long id, @RequestBody Estudiante estudiante) {
         Estudiante actualizado = service.actualizar(id, estudiante);
         if (actualizado == null) {
@@ -78,6 +84,7 @@ public class EstudianteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         Optional<Estudiante> estudiante = service.obtenerPorId(id);
         if (estudiante.isEmpty()) {

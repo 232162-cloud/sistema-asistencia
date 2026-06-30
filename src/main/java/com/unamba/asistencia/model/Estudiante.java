@@ -1,4 +1,5 @@
 package com.unamba.asistencia.model;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,10 @@ public class Estudiante {
     private String apellidos;
 
     private String carrera;
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id", nullable = true)
+    private Usuario usuario;
 
     public Estudiante() {
     }
@@ -70,5 +75,13 @@ public class Estudiante {
 
     public void setCarrera(String carrera) {
         this.carrera = carrera;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

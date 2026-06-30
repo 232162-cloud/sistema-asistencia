@@ -40,6 +40,12 @@ public class JwtService {
         return claims.getSubject();
     }
 
+    public String getRol(String token) {
+        Claims claims = extractAllClaims(token);
+        Object rol = claims.get("rol");
+        return rol != null ? rol.toString() : null;
+    }
+
     public boolean isValidToken(String token) {
         try {
             Claims claims = extractAllClaims(token);

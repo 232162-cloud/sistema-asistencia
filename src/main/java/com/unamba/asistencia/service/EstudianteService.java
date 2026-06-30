@@ -61,6 +61,9 @@ public class EstudianteService {
             if (estudianteActualizado.getCarrera() != null) {
                 est.setCarrera(estudianteActualizado.getCarrera());
             }
+            if (estudianteActualizado.getUsuario() != null) {
+                est.setUsuario(estudianteActualizado.getUsuario());
+            }
             return repository.save(est);
         }
         return null;
