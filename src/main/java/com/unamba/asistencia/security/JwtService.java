@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,16 +59,15 @@ public class JwtService {
         return new Date(System.currentTimeMillis() + EXPIRATION_TIME);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
+private Claims extractAllClaims(String token) {
+    return Jwts.parser()
+            .verifyWith((javax.crypto.SecretKey) getSignInKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+}
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(Decoders.BASE64.encode(SECRET_KEY.getBytes()));
+        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
