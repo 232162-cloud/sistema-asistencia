@@ -43,6 +43,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(this::handleUnauthorized)
+                        .accessDeniedHandler(this::handleForbidden)
                 )
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -63,7 +64,9 @@ public class SecurityConfig {
                                     HttpServletResponse response,
                                     org.springframework.security.core.AuthenticationException authException)
             throws IOException {
+
         String error = (String) request.getAttribute(JwtFilter.ERROR_ATTR);
+
         if (error == null) {
             error = "UNAUTHORIZED";
         }
@@ -71,5 +74,15 @@ public class SecurityConfig {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write("{\"error\":\"" + error + "\"}");
+    }
+
+    private void handleForbidden(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 org.springframework.security.access.AccessDeniedException accessDeniedException)
+            throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write("{\"error\":\"ACCESS_DENIED\",\"message\":\"No tienes permisos para realizar esta accion\"}");
     }
 }
