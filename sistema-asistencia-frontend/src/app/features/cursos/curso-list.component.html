@@ -1,0 +1,52 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Registro</span>
+      <h1>Cursos</h1>
+    </div>
+    <a class="btn" routerLink="/cursos/nuevo" *ngIf="auth.tieneRol('ADMIN')">+ Nuevo curso</a>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="table-wrap" *ngIf="!cargando(); else loading">
+    <table class="registro" *ngIf="cursos().length; else vacio">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Ciclo</th>
+          <th>Créditos</th>
+          <th>Docente</th>
+          <th *ngIf="auth.tieneRol('ADMIN')"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let curso of cursos()">
+          <td>{{ curso.codigo }}</td>
+          <td>{{ curso.nombre }}</td>
+          <td>{{ curso.ciclo || '—' }}</td>
+          <td>{{ curso.creditos ?? '—' }}</td>
+          <td>{{ curso.docente?.nombreCompleto || curso.docente?.username || '—' }}</td>
+          <td *ngIf="auth.tieneRol('ADMIN')">
+            <div class="table-actions">
+              <a class="btn btn-outline btn-sm" [routerLink]="['/cursos', curso.id, 'editar']">Editar</a>
+              <button class="btn btn-danger btn-sm" (click)="eliminar(curso)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #vacio>
+    <div class="empty-state card">
+      <h3>Aún no hay cursos registrados</h3>
+      <p>Crea el primer curso para empezar a tomar asistencia.</p>
+    </div>
+  </ng-template>
+
+  <ng-template #loading>
+    <p>Cargando cursos…</p>
+  </ng-template>
+</div>
