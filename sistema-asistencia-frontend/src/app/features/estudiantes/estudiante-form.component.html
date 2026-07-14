@@ -1,0 +1,48 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">{{ esEdicion() ? 'Editar' : 'Nuevo' }}</span>
+      <h1>{{ esEdicion() ? 'Editar estudiante' : 'Nuevo estudiante' }}</h1>
+    </div>
+    <a class="btn btn-outline" routerLink="/estudiantes">Volver</a>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <form class="card" [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-grid">
+      <div class="field">
+        <label for="codigo">Código</label>
+        <input id="codigo" type="text" formControlName="codigo" />
+        <span class="field-error" *ngIf="form.get('codigo')?.touched && form.get('codigo')?.invalid">
+          El código es obligatorio.
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="carrera">Carrera</label>
+        <input id="carrera" type="text" formControlName="carrera" />
+      </div>
+
+      <div class="field">
+        <label for="nombres">Nombres</label>
+        <input id="nombres" type="text" formControlName="nombres" />
+        <span class="field-error" *ngIf="form.get('nombres')?.touched && form.get('nombres')?.invalid">
+          Los nombres son obligatorios.
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="apellidos">Apellidos</label>
+        <input id="apellidos" type="text" formControlName="apellidos" />
+        <span class="field-error" *ngIf="form.get('apellidos')?.touched && form.get('apellidos')?.invalid">
+          Los apellidos son obligatorios.
+        </span>
+      </div>
+    </div>
+
+    <button class="btn" type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Guardando…' : 'Guardar estudiante' }}
+    </button>
+  </form>
+</div>

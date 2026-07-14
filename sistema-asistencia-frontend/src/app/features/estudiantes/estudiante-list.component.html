@@ -1,0 +1,63 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Registro</span>
+      <h1>Estudiantes</h1>
+    </div>
+    <a class="btn" routerLink="/estudiantes/nuevo" *ngIf="auth.tieneRol('ADMIN')">+ Nuevo estudiante</a>
+  </div>
+
+  <div class="field" style="max-width: 320px;">
+    <label for="buscar">Buscar por nombre</label>
+    <input
+      id="buscar"
+      type="text"
+      placeholder="Ej. María"
+      [value]="busqueda()"
+      (input)="buscar($any($event.target).value)"
+    />
+  </div>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="table-wrap" *ngIf="!cargando(); else loading">
+    <table class="registro" *ngIf="estudiantes().length; else vacio">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Carrera</th>
+          <th>Usuario vinculado</th>
+          <th *ngIf="auth.tieneRol('ADMIN')"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estudiante of estudiantes()">
+          <td>{{ estudiante.codigo }}</td>
+          <td>{{ estudiante.nombres }}</td>
+          <td>{{ estudiante.apellidos }}</td>
+          <td>{{ estudiante.carrera || '—' }}</td>
+          <td>{{ estudiante.usuario?.username || '—' }}</td>
+          <td *ngIf="auth.tieneRol('ADMIN')">
+            <div class="table-actions">
+              <a class="btn btn-outline btn-sm" [routerLink]="['/estudiantes', estudiante.id, 'editar']">Editar</a>
+              <button class="btn btn-danger btn-sm" (click)="eliminar(estudiante)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #vacio>
+    <div class="empty-state card">
+      <h3>No se encontraron estudiantes</h3>
+      <p>Prueba con otro término de búsqueda o registra uno nuevo.</p>
+    </div>
+  </ng-template>
+
+  <ng-template #loading>
+    <p>Cargando estudiantes…</p>
+  </ng-template>
+</div>
