@@ -1,0 +1,36 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  text-decoration: none;
+  color: var(--ink);
+  display: block;
+  position: relative;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 42, 68, 0.1);
+}
+
+.tile-mark {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.tile h3 {
+  margin: 10px 0 6px;
+  font-size: 19px;
+}
+
+.tile p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+}

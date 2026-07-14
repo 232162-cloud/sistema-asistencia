@@ -1,0 +1,54 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Panel</span>
+      <h1>Hola, {{ auth.username() }}</h1>
+    </div>
+  </div>
+
+  <div class="grid">
+    <ng-container *ngIf="auth.tieneRol('ADMIN')">
+      <a class="tile card" routerLink="/cursos">
+        <span class="tile-mark">01</span>
+        <h3>Cursos</h3>
+        <p>Crea, edita y asigna docentes a los cursos.</p>
+      </a>
+      <a class="tile card" routerLink="/estudiantes">
+        <span class="tile-mark">02</span>
+        <h3>Estudiantes</h3>
+        <p>Administra el registro de estudiantes.</p>
+      </a>
+      <a class="tile card" routerLink="/asistencias">
+        <span class="tile-mark">03</span>
+        <h3>Asistencias</h3>
+        <p>Consulta y corrige cualquier registro de asistencia.</p>
+      </a>
+      <a class="tile card" routerLink="/docentes">
+        <span class="tile-mark">04</span>
+        <h3>Docentes</h3>
+        <p>Da de alta nuevas cuentas de docente.</p>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="auth.tieneRol('DOCENTE')">
+      <a class="tile card" routerLink="/cursos">
+        <span class="tile-mark">01</span>
+        <h3>Mis cursos</h3>
+        <p>Revisa los cursos a tu cargo.</p>
+      </a>
+      <a class="tile card" routerLink="/asistencias">
+        <span class="tile-mark">02</span>
+        <h3>Tomar asistencia</h3>
+        <p>Registra y actualiza la asistencia de tus estudiantes.</p>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="auth.tieneRol('ALUMNO')">
+      <a class="tile card" routerLink="/mi-asistencia">
+        <span class="tile-mark">01</span>
+        <h3>Mi asistencia</h3>
+        <p>Consulta tu historial de asistencia por curso.</p>
+      </a>
+    </ng-container>
+  </div>
+</div>
