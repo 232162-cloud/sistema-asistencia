@@ -1,0 +1,85 @@
+.navbar {
+  background: var(--ink);
+  border-bottom: 3px double var(--accent);
+}
+
+.navbar-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--paper-raised);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.links a {
+  color: #c9d0e0;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.links a:hover {
+  color: var(--paper-raised);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.links a.active {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.session .user {
+  color: var(--paper-raised);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.session .btn-outline {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--paper-raised);
+}
+
+.session .btn-outline:hover {
+  border-color: var(--paper-raised);
+}
+
+@media (max-width: 768px) {
+  .navbar-inner {
+    flex-wrap: wrap;
+  }
+}

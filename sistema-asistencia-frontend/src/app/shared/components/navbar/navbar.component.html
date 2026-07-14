@@ -1,0 +1,34 @@
+<header class="navbar" *ngIf="auth.isLoggedIn()">
+  <div class="navbar-inner">
+    <a routerLink="/dashboard" class="brand">
+      <span class="brand-mark">§</span>
+      Libro de Asistencia
+    </a>
+
+    <nav class="links">
+      <a routerLink="/dashboard" routerLinkActive="active">Panel</a>
+
+      <ng-container *ngIf="auth.tieneRol('ADMIN')">
+        <a routerLink="/cursos" routerLinkActive="active">Cursos</a>
+        <a routerLink="/estudiantes" routerLinkActive="active">Estudiantes</a>
+        <a routerLink="/asistencias" routerLinkActive="active">Asistencias</a>
+        <a routerLink="/docentes" routerLinkActive="active">Docentes</a>
+      </ng-container>
+
+      <ng-container *ngIf="auth.tieneRol('DOCENTE')">
+        <a routerLink="/cursos" routerLinkActive="active">Cursos</a>
+        <a routerLink="/asistencias" routerLinkActive="active">Asistencias</a>
+      </ng-container>
+
+      <ng-container *ngIf="auth.tieneRol('ALUMNO')">
+        <a routerLink="/mi-asistencia" routerLinkActive="active">Mi asistencia</a>
+      </ng-container>
+    </nav>
+
+    <div class="session">
+      <span class="chip-rol">{{ auth.rol() }}</span>
+      <span class="user">{{ auth.username() }}</span>
+      <button class="btn btn-outline btn-sm" (click)="cerrarSesion()">Salir</button>
+    </div>
+  </div>
+</header>
