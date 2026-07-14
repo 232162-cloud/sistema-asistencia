@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">{{ esEdicion() ? 'Editar' : 'Nuevo' }}</span>
+      <h1>{{ esEdicion() ? 'Editar asistencia' : 'Registrar asistencia' }}</h1>
+    </div>
+    <a class="btn btn-outline" routerLink="/asistencias">Volver</a>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <form class="card" [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-grid">
+      <div class="field">
+        <label for="estudianteId">Estudiante</label>
+        <select id="estudianteId" formControlName="estudianteId">
+          <option [ngValue]="null" disabled>Selecciona un estudiante</option>
+          <option *ngFor="let estudiante of estudiantes()" [ngValue]="estudiante.id">
+            {{ estudiante.nombres }} {{ estudiante.apellidos }} ({{ estudiante.codigo }})
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="cursoId">Curso</label>
+        <select id="cursoId" formControlName="cursoId">
+          <option [ngValue]="null" disabled>Selecciona un curso</option>
+          <option *ngFor="let curso of cursos()" [ngValue]="curso.id">{{ curso.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="fecha">Fecha</label>
+        <input id="fecha" type="date" formControlName="fecha" />
+      </div>
+
+      <div class="field">
+        <label for="estado">Estado</label>
+        <select id="estado" formControlName="estado">
+          <option value="Presente">Presente</option>
+          <option value="Tarde">Tarde</option>
+          <option value="Falta">Falta</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" formControlName="observaciones" rows="3"></textarea>
+    </div>
+
+    <button class="btn" type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Guardando…' : 'Guardar registro' }}
+    </button>
+  </form>
+</div>

@@ -1,0 +1,83 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Registro</span>
+      <h1>Asistencias</h1>
+    </div>
+    <a class="btn" routerLink="/asistencias/nueva">+ Registrar asistencia</a>
+  </div>
+
+  <form class="card" style="margin-bottom: 20px;" [formGroup]="filtroForm" (ngSubmit)="filtrar()">
+    <div class="form-grid">
+      <div class="field">
+        <label for="fecha">Fecha</label>
+        <input id="fecha" type="date" formControlName="fecha" />
+      </div>
+      <div class="field">
+        <label for="estado">Estado</label>
+        <select id="estado" formControlName="estado">
+          <option value="">Todos</option>
+          <option value="Presente">Presente</option>
+          <option value="Tarde">Tarde</option>
+          <option value="Falta">Falta</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="cursoId">Curso</label>
+        <select id="cursoId" formControlName="cursoId">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let curso of cursos()" [ngValue]="curso.id">{{ curso.nombre }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-actions">
+      <button class="btn" type="submit">Filtrar</button>
+      <button class="btn btn-outline" type="button" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </form>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="table-wrap" *ngIf="!cargando(); else loading">
+    <table class="registro" *ngIf="asistencias().length; else vacio">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Estudiante</th>
+          <th>Curso</th>
+          <th>Estado</th>
+          <th>Observaciones</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asistencia of asistencias()">
+          <td>{{ asistencia.fecha }}</td>
+          <td>{{ asistencia.estudiante?.nombres }} {{ asistencia.estudiante?.apellidos }}</td>
+          <td>{{ asistencia.curso?.nombre }}</td>
+          <td><span [class]="claseSello(asistencia.estado)">{{ asistencia.estado }}</span></td>
+          <td>{{ asistencia.observaciones || '—' }}</td>
+          <td>
+            <div class="table-actions">
+              <a class="btn btn-outline btn-sm" [routerLink]="['/asistencias', asistencia.id, 'editar']">Editar</a>
+              <button class="btn btn-danger btn-sm" *ngIf="auth.tieneRol('ADMIN')" (click)="eliminar(asistencia)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #vacio>
+    <div class="empty-state card">
+      <h3>No hay registros de asistencia</h3>
+      <p>Ajusta los filtros o registra una nueva asistencia.</p>
+    </div>
+  </ng-template>
+
+  <ng-template #loading>
+    <p>Cargando asistencias…</p>
+  </ng-template>
+</div>

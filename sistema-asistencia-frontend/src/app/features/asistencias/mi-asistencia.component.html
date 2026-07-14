@@ -1,0 +1,61 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Tu historial</span>
+      <h1>Mi asistencia</h1>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="resumen" *ngIf="!cargando()">
+    <div class="card resumen-item">
+      <span class="resumen-num">{{ resumen().total }}</span>
+      <span class="resumen-label">Registros</span>
+    </div>
+    <div class="card resumen-item">
+      <span class="resumen-num" style="color: var(--stamp-ok);">{{ resumen().presente }}</span>
+      <span class="resumen-label">Presente</span>
+    </div>
+    <div class="card resumen-item">
+      <span class="resumen-num" style="color: var(--stamp-warn);">{{ resumen().tarde }}</span>
+      <span class="resumen-label">Tarde</span>
+    </div>
+    <div class="card resumen-item">
+      <span class="resumen-num" style="color: var(--stamp-bad);">{{ resumen().falta }}</span>
+      <span class="resumen-label">Falta</span>
+    </div>
+  </div>
+
+  <div class="table-wrap" *ngIf="!cargando(); else loading" style="margin-top: 20px;">
+    <table class="registro" *ngIf="asistencias().length; else vacio">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Curso</th>
+          <th>Estado</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asistencia of asistencias()">
+          <td>{{ asistencia.fecha }}</td>
+          <td>{{ asistencia.curso?.nombre }}</td>
+          <td><span [class]="claseSello(asistencia.estado)">{{ asistencia.estado }}</span></td>
+          <td>{{ asistencia.observaciones || '—' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #vacio>
+    <div class="empty-state card">
+      <h3>Todavía no tienes registros</h3>
+      <p>Tu docente aún no ha registrado asistencia para ti.</p>
+    </div>
+  </ng-template>
+
+  <ng-template #loading>
+    <p>Cargando tu historial…</p>
+  </ng-template>
+</div>
